@@ -1,0 +1,58 @@
+# Ralph TUI Configuration
+tracker = "json"
+maxIterations = 10
+iterationDelay = 1000
+outputDir = ".ralph-tui/iterations"
+progressFile = ".ralph-tui/progress.md"
+autoCommit = false
+
+[trackerOptions]
+path = "./prd.json"
+
+# ─── OS-level sandbox ─────────────────────────────────────────────
+[sandbox]
+enabled = true
+mode = "auto"           # Uses sandbox-exec (Seatbelt) on macOS
+network = true          # Must be true for Anthropic API calls
+allowPaths = []
+readOnlyPaths = []
+
+# ─── Environment variable filtering ──────────────────────────────
+# Block credentials from leaking to the agent process
+envExclude = [
+  "*_TOKEN",
+  "*_PASSWORD",
+  "DATABASE_URL",
+  "AWS_*",
+  "*CREDENTIAL*",
+  "GITHUB_TOKEN",
+  "GH_TOKEN",
+  "NPM_TOKEN",
+  "DOCKER_*",
+]
+envPassthrough = ["ANTHROPIC_API_KEY"]
+
+# ─── Locked-down agent config ────────────────────────────────────
+[[agents]]
+name = "claude-locked"
+plugin = "claude"
+default = true
+timeout = 300000
+defaultFlags = [
+  "--disallowedTools", "WebFetch",
+  "--disallowedTools", "WebSearch",
+]
+
+[agents.options]
+model = "claude-sonnet-4-20250514"
+
+# ─── Error handling ───────────────────────────────────────────────
+[errorHandling]
+strategy = "skip"
+maxRetries = 3
+retryDelayMs = 5000
+continueOnNonZeroExit = false
+
+[notifications]
+enabled = true
+sound = "off"

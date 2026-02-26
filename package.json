@@ -1,0 +1,22 @@
+{
+  "name": "ralph-setup",
+  "version": "1.1.0",
+  "description": "Scaffold Ralph TUI and Kiro CLI with locked-down security config in any project",
+  "type": "module",
+  "bin": {
+    "ralph-setup": "./bin/ralph-setup.mjs"
+  },
+  "files": [
+    "bin/",
+    "templates/"
+  ],
+  "keywords": [
+    "ralph-tui",
+    "cli",
+    "scaffold",
+    "claude",
+    "ai-agent",
+    "kiro"
+  ],
+  "license": "MIT"
+}

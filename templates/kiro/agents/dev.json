@@ -1,0 +1,18 @@
+{
+  "name": "dev-locked",
+  "description": "Locked-down development agent with restricted tool access",
+  "model": "claude-sonnet-4-20250514",
+  "tools": ["read", "edit", "write", "glob", "grep", "bash"],
+  "allowedTools": [
+    "Bash(npm run *)",
+    "Bash(npm install *)",
+    "Bash(node *)",
+    "Bash(git status)",
+    "Bash(git diff *)",
+    "Bash(git add *)",
+    "Bash(git commit *)",
+    "Bash(git log *)",
+    "Bash(ls *)",
+    "Bash(mkdir *)"
+  ]
+}

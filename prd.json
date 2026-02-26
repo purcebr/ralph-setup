@@ -1,0 +1,39 @@
+{
+  "name": "REPLACE_WITH_PROJECT_NAME",
+  "description": "REPLACE_WITH_FEATURE_DESCRIPTION",
+  "branchName": "feature/REPLACE_WITH_BRANCH_NAME",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Example: First task with no dependencies",
+      "description": "As a [role] I want [goal] so that [benefit]",
+      "acceptanceCriteria": [
+        "Specific, testable criterion the agent can verify",
+        "e.g. 'npm run build succeeds'",
+        "e.g. 'src/auth/login.ts exports a login() function'",
+        "e.g. 'npm test passes with no failures'"
+      ],
+      "priority": 1,
+      "passes": false,
+      "labels": [],
+      "dependsOn": [],
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Example: Second task that depends on US-001",
+      "description": "As a [role] I want [goal] so that [benefit]",
+      "acceptanceCriteria": [
+        "Criteria should be things the agent can check programmatically",
+        "e.g. 'GET /api/users returns 200 with JSON array'",
+        "e.g. 'npm run lint passes with no errors'"
+      ],
+      "priority": 1,
+      "passes": false,
+      "labels": [],
+      "dependsOn": ["US-001"],
+      "notes": ""
+    }
+  ],
+  "metadata": {}
+}
