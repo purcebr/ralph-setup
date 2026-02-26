@@ -4,6 +4,20 @@ Scaffold [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Kiro
 
 Ralph TUI can orchestrate both Claude Code and Kiro CLI as agent backends. `ralph-setup` drops opinionated, security-first config files into your project so agents can only do what you explicitly allow — no web access, no secret exfiltration, no surprise `git push`.
 
+## Why not just use Ralph TUI directly?
+
+Ralph TUI is the orchestration engine — it runs iterations, tracks user stories, and manages the agent loop. But it ships with no opinion about security. You install it and it works, but the agent has full access to everything by default.
+
+`ralph-setup` adds the security-first config layer on top:
+
+- **Locked-down permissions** — explicit allow/deny lists so agents can only run approved commands (`npm run`, `git diff`, `ls`, etc.) and are blocked from `git push`, `curl`, `ssh`, reading `~/.ssh`, `.env`, etc.
+- **Sandbox + env filtering** — OS-level sandboxing enabled, and env vars matching `*_TOKEN`, `*_PASSWORD`, `AWS_*` are filtered out so credentials never leak to the agent process
+- **Web access blocked** — `WebFetch` and `WebSearch` are denied in both Claude Code and Kiro configs, so agents can't phone home or exfiltrate data
+- **Kiro parity** — same locked-down posture for Kiro CLI via `.kiro/agents/dev.json` with restricted tool allowlists
+- **One command** — instead of manually creating 3-6 config files and knowing which permissions to set, `ralph-setup init` gives you a secure starting point in seconds
+
+Ralph TUI is the engine, `ralph-setup` is the guardrails.
+
 ## Install
 
 ```bash
