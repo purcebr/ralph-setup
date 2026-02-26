@@ -1,7 +1,7 @@
 {
   "name": "ralph-setup",
   "version": "1.1.0",
-  "description": "Scaffold Ralph TUI and Kiro CLI with locked-down security config in any project",
+  "description": "Scaffold Claude Code and Kiro CLI configs for Ralph TUI with locked-down security defaults",
   "type": "module",
   "bin": {
     "ralph-setup": "./bin/ralph-setup.mjs"
