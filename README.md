@@ -1,8 +1,8 @@
 # ralph-setup
 
-Scaffold [Ralph TUI](https://github.com/ralphcodeai/ralph-tui) and [Kiro CLI](https://cli.kiro.dev) with locked-down security configs in any project.
+Scaffold [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Kiro CLI](https://cli.kiro.dev) configs for [Ralph TUI](https://github.com/ralphcodeai/ralph-tui) in any project.
 
-Both tools let you run AI coding agents locally. `ralph-setup` drops opinionated, security-first config files into your project so agents can only do what you explicitly allow — no web access, no secret exfiltration, no surprise `git push`.
+Ralph TUI can orchestrate both Claude Code and Kiro CLI as agent backends. `ralph-setup` drops opinionated, security-first config files into your project so agents can only do what you explicitly allow — no web access, no secret exfiltration, no surprise `git push`.
 
 ## Install
 
@@ -13,12 +13,12 @@ npm install -g ralph-setup
 ## Usage
 
 ```bash
-ralph-setup init [path]           # Scaffold both Ralph TUI + Kiro (default)
-ralph-setup init --ralph [path]   # Ralph TUI only
-ralph-setup init --kiro [path]    # Kiro CLI only
+ralph-setup init [path]            # Scaffold both Claude Code + Kiro (default)
+ralph-setup init --claude [path]   # Claude Code only
+ralph-setup init --kiro [path]     # Kiro CLI only
 ```
 
-Flags can be combined: `--ralph --kiro` is the same as no flags (both).
+Flags can be combined: `--claude --kiro` is the same as no flags (both).
 
 ### Examples
 
@@ -30,7 +30,7 @@ ralph-setup init --kiro ./my-app  # Set up Kiro only in ./my-app
 
 ## What gets created
 
-### Ralph TUI (`--ralph`)
+### Claude Code (`--claude`)
 
 | File | Purpose |
 |------|---------|

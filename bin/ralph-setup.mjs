@@ -49,7 +49,7 @@ function commandExists(cmd) {
   }
 }
 
-// --- Ralph dependencies ---
+// --- Claude Code dependencies ---
 
 function ensureBun() {
   if (commandExists("bun")) {
@@ -125,10 +125,10 @@ function copyTemplate(srcRelPath, destDir, destRelPath) {
   success(`Created ${destRelPath}`);
 }
 
-function copyRalphTemplates(targetDir) {
-  copyTemplate("ralph/config.toml", targetDir, ".ralph-tui/config.toml");
-  copyTemplate("ralph/settings.json", targetDir, ".claude/settings.json");
-  copyTemplate("ralph/prd.json", targetDir, "prd.json");
+function copyClaudeTemplates(targetDir) {
+  copyTemplate("claude/config.toml", targetDir, ".ralph-tui/config.toml");
+  copyTemplate("claude/settings.json", targetDir, ".claude/settings.json");
+  copyTemplate("claude/prd.json", targetDir, "prd.json");
 }
 
 function copyKiroTemplates(targetDir) {
@@ -141,32 +141,32 @@ function copyKiroTemplates(targetDir) {
 
 function printUsage() {
   log("");
-  log(bold("ralph-setup") + " — scaffold Ralph TUI and/or Kiro CLI in any project");
+  log(bold("ralph-setup") + " — scaffold Claude Code and/or Kiro CLI configs for Ralph TUI");
   log("");
   log("Usage:");
-  log(`  ${cyan("ralph-setup init [path]")}           Scaffold both Ralph TUI + Kiro (default)`);
-  log(`  ${cyan("ralph-setup init --ralph [path]")}   Ralph TUI only`);
-  log(`  ${cyan("ralph-setup init --kiro [path]")}    Kiro CLI only`);
+  log(`  ${cyan("ralph-setup init [path]")}            Scaffold both Claude Code + Kiro (default)`);
+  log(`  ${cyan("ralph-setup init --claude [path]")}   Claude Code only`);
+  log(`  ${cyan("ralph-setup init --kiro [path]")}     Kiro CLI only`);
   log("");
-  log("Flags can be combined: --ralph --kiro is the same as no flags (both).");
+  log("Flags can be combined: --claude --kiro is the same as no flags (both).");
   log("");
   log("Examples:");
-  log(`  ${cyan("ralph-setup init")}                  Set up both in current directory`);
-  log(`  ${cyan("ralph-setup init ./my-app")}         Set up both in ./my-app`);
-  log(`  ${cyan("ralph-setup init --kiro ./my-app")}  Set up Kiro only in ./my-app`);
+  log(`  ${cyan("ralph-setup init")}                   Set up both in current directory`);
+  log(`  ${cyan("ralph-setup init ./my-app")}          Set up both in ./my-app`);
+  log(`  ${cyan("ralph-setup init --kiro ./my-app")}   Set up Kiro only in ./my-app`);
   log("");
 }
 
-function printNextSteps({ ralph, kiro }) {
+function printNextSteps({ claude, kiro }) {
   log("");
   log(bold("Next steps:"));
-  if (ralph) {
+  if (claude) {
     log(`  1. Edit ${cyan("prd.json")} with your project's user stories`);
     log(`  2. Review ${cyan(".claude/settings.json")} permissions for your needs`);
     log(`  3. Run ${cyan("ralph-tui")} to start iterating`);
   }
   if (kiro) {
-    const offset = ralph ? 4 : 1;
+    const offset = claude ? 4 : 1;
     log(`  ${offset}. Edit ${cyan(".kiro/steering/project.md")} with your project context`);
     log(`  ${offset + 1}. Review ${cyan(".kiro/agents/dev.json")} allowed tools for your needs`);
     log(`  ${offset + 2}. Run ${cyan("kiro-cli")} to start coding`);
@@ -184,13 +184,13 @@ function parseArgs(argv) {
     return { command: null };
   }
 
-  let ralph = false;
+  let claude = false;
   let kiro = false;
   let path = null;
 
   for (let i = 1; i < args.length; i++) {
-    if (args[i] === "--ralph") {
-      ralph = true;
+    if (args[i] === "--claude") {
+      claude = true;
     } else if (args[i] === "--kiro") {
       kiro = true;
     } else if (!args[i].startsWith("--")) {
@@ -199,17 +199,17 @@ function parseArgs(argv) {
   }
 
   // Default: both when neither flag is set
-  if (!ralph && !kiro) {
-    ralph = true;
+  if (!claude && !kiro) {
+    claude = true;
     kiro = true;
   }
 
-  return { command, ralph, kiro, path };
+  return { command, claude, kiro, path };
 }
 
 // --- Main ---
 
-const { command, ralph, kiro, path } = parseArgs(process.argv);
+const { command, claude, kiro, path } = parseArgs(process.argv);
 
 if (!command) {
   printUsage();
@@ -224,7 +224,7 @@ if (command !== "init") {
 
 const targetDir = resolve(path || ".");
 
-const tools = [ralph && "Ralph TUI", kiro && "Kiro CLI"].filter(Boolean).join(" + ");
+const tools = [claude && "Claude Code", kiro && "Kiro CLI"].filter(Boolean).join(" + ");
 log("");
 log(bold(`ralph-setup init (${tools})`));
 log(`  Target: ${cyan(targetDir)}`);
@@ -233,7 +233,7 @@ log("");
 // --- Install dependencies ---
 
 log(bold("Checking dependencies..."));
-if (ralph) {
+if (claude) {
   ensureBun();
   ensureRalphTui();
 }
@@ -245,11 +245,11 @@ log("");
 // --- Copy templates ---
 
 log(bold("Copying config files..."));
-if (ralph) {
-  copyRalphTemplates(targetDir);
+if (claude) {
+  copyClaudeTemplates(targetDir);
 }
 if (kiro) {
   copyKiroTemplates(targetDir);
 }
 
-printNextSteps({ ralph, kiro });
+printNextSteps({ claude, kiro });
