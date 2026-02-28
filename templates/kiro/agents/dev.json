@@ -1,18 +1,64 @@
 {
   "name": "dev-locked",
-  "description": "Locked-down development agent with restricted tool access",
+  "description": "Locked-down development agent with restricted tool access and security scripts",
   "model": "claude-sonnet-4-20250514",
-  "tools": ["read", "edit", "write", "glob", "grep", "bash"],
+  "tools": ["read", "write", "glob", "grep", "shell"],
   "allowedTools": [
     "Bash(npm run *)",
     "Bash(npm install *)",
     "Bash(node *)",
     "Bash(git status)",
     "Bash(git diff *)",
-    "Bash(git add *)",
-    "Bash(git commit *)",
     "Bash(git log *)",
     "Bash(ls *)",
-    "Bash(mkdir *)"
-  ]
+    "Bash(mkdir *)",
+    "Bash(cat *)",
+    "Bash(.kiro/scripts/*.sh *)"
+  ],
+  "toolsSettings": {
+    "shell": {
+      "deniedCommands": [
+        "\\Agit push\\b",
+        "\\Agit remote\\b",
+        "\\Agit reset --hard\\b",
+        "\\Agit clean\\b",
+        "\\Acurl\\b",
+        "\\Awget\\b",
+        "\\Assh\\b",
+        "\\Ascp\\b",
+        "\\Anc\\b",
+        "\\Ancat\\b",
+        "\\Atelnet\\b",
+        "\\Aftp\\b",
+        "\\Arsync\\b",
+        "\\Aopen\\b",
+        "\\Apbcopy\\b",
+        "\\Aosascript\\b",
+        "\\Asudo\\b",
+        "\\Arm -rf /\\b"
+      ]
+    },
+    "read": {
+      "deniedPaths": [
+        "~/.ssh/**",
+        ".env",
+        "~/.aws/**",
+        "~/.config/gh/**"
+      ]
+    }
+  },
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "execute_bash",
+        "command": ".kiro/scripts/scan-secrets.sh --hook-mode"
+      }
+    ],
+    "stop": [
+      {
+        "command": ".kiro/scripts/check-build.sh --quiet",
+        "timeout_ms": 120000
+      }
+    ]
+  }
 }

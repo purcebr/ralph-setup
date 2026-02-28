@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -135,6 +135,30 @@ function copyKiroTemplates(targetDir) {
   copyTemplate("kiro/settings/mcp.json", targetDir, ".kiro/settings/mcp.json");
   copyTemplate("kiro/steering/project.md", targetDir, ".kiro/steering/project.md");
   copyTemplate("kiro/agents/dev.json", targetDir, ".kiro/agents/dev.json");
+
+  // Shell scripts for latency reduction and security enforcement
+  const scripts = [
+    "setup-project.sh",
+    "run-tests.sh",
+    "validate-acceptance.sh",
+    "safe-git.sh",
+    "scan-secrets.sh",
+    "check-build.sh",
+  ];
+
+  for (const script of scripts) {
+    copyTemplate(`kiro/scripts/${script}`, targetDir, `.kiro/scripts/${script}`);
+  }
+
+  // Ensure scripts are executable
+  const scriptsDir = join(targetDir, ".kiro", "scripts");
+  if (existsSync(scriptsDir)) {
+    for (const f of readdirSync(scriptsDir)) {
+      if (f.endsWith(".sh")) {
+        chmodSync(join(scriptsDir, f), 0o755);
+      }
+    }
+  }
 }
 
 // --- Usage / help ---
@@ -169,7 +193,8 @@ function printNextSteps({ claude, kiro }) {
     const offset = claude ? 4 : 1;
     log(`  ${offset}. Edit ${cyan(".kiro/steering/project.md")} with your project context`);
     log(`  ${offset + 1}. Review ${cyan(".kiro/agents/dev.json")} allowed tools for your needs`);
-    log(`  ${offset + 2}. Run ${cyan("kiro-cli")} to start coding`);
+    log(`  ${offset + 2}. Review ${cyan(".kiro/scripts/")} shell helpers (safe-git, scan-secrets, etc.)`);
+    log(`  ${offset + 3}. Run ${cyan("kiro-cli")} to start coding`);
   }
   log("");
 }
